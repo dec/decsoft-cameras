@@ -139,9 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
            videoSettings = cameras.getCameraSettings(camerasSelect.value),
            videoCapabilities = cameras.getCameraCapabilities(camerasSelect.value);
 
-         console.info(videoCapabilities);
-         console.info(videoSettings);
-
          videoElement.srcObject = mediaStream;
          videoElement.play();
 
