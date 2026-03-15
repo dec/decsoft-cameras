@@ -1,6 +1,7 @@
 
   let
     cameras = new DecSoftCameras(),
+
     videoElement = null,
     camerasSelect = null,
     capturedImage = null,
@@ -30,8 +31,6 @@
     startCameraRecordingButton = null,
     camerasInitializeContainer = null,
     colorTemperatureRangeInput = null;
-
-
 
 function resetControls () {
 
