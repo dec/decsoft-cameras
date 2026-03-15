@@ -5,17 +5,20 @@ document.addEventListener('DOMContentLoaded', () => {
     cameras = new DecSoftCameras(),
     videoElement = document.getElementById('video-camera'),
     camerasSelect = document.getElementById('cameras-select'),
+    capturedImage = document.getElementById('captured-image'),
     panRangeInput = document.getElementById('pan-range-input'),
     zoomRangeInput = document.getElementById('zoom-range-input'),
     tiltRangeInput = document.getElementById('tilt-range-input'),
     stopCameraButton = document.getElementById('stop-camera-button'),
     pauseCameraButton = document.getElementById('pause-camera-button'),
+    captureBlobButton = document.getElementById('capture-blob-button'),
     startCameraButton = document.getElementById('start-camera-button'),
     resumeCameraButton = document.getElementById('resume-camera-button'),
+    captureBase64Button = document.getElementById('capture-base64-button'),
     videoCameraContainer = document.getElementById('video-camera-container'),
     initCamerasButton = document.getElementById('initialize-cameras-button'),
     camerasStuffContainer = document.getElementById('camera-stuff-container'),
-    getVideoCaptureButton = document.getElementById('get-video-capture-button'),
+    capturedImageContainer = document.getElementById('captured-image-container'),
     stopCameraRecordingButton = document.getElementById('stop-recording-button'),
     startCameraRecordingButton = document.getElementById('start-recording-button'),
     camerasInitializeContainer = document.getElementById('cameras-initialize-container');
@@ -24,11 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
   tiltRangeInput.disabled = true;
   zoomRangeInput.disabled = true;
   stopCameraButton.disabled = true;
+  captureBlobButton.disabled = true;
   pauseCameraButton.disabled = true;
   resumeCameraButton.disabled = true;
-  getVideoCaptureButton.disabled = true;
+  captureBase64Button.disabled = true;
   stopCameraRecordingButton.disabled = true;
   startCameraRecordingButton.disabled = true;
+  capturedImageContainer.classList.add('d-none');
 
   initCamerasButton.addEventListener('click', () => {
 
@@ -64,10 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
      zoomRangeInput.disabled = true;
      stopCameraButton.disabled = true;
      pauseCameraButton.disabled = true;
+     captureBlobButton.disabled = true;
      resumeCameraButton.disabled = true;
-     getVideoCaptureButton.disabled = true;
+     captureBase64Button.disabled = true;
      stopCameraRecordingButton.disabled = true;
      startCameraRecordingButton.disabled = true;
+     capturedImageContainer.classList.add('d-none');
 
      cameras.stopCameras();
 
@@ -76,7 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
          stopCameraButton.disabled = false;
          pauseCameraButton.disabled = false;
-         getVideoCaptureButton.disabled = false;
+         captureBlobButton.disabled = false;
+         captureBase64Button.disabled = false;
          startCameraRecordingButton.disabled = false;
          videoCameraContainer.classList.remove('d-none');
 
@@ -147,10 +155,12 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomRangeInput.disabled = true;
     stopCameraButton.disabled = true;
     pauseCameraButton.disabled = true;
+    captureBlobButton.disabled = true;
     resumeCameraButton.disabled = true;
-    getVideoCaptureButton.disabled = true;
+    captureBase64Button.disabled = true;
     stopCameraRecordingButton.disabled = true;
     startCameraRecordingButton.disabled = true;
+    capturedImageContainer.classList.add('d-none');
 
     if (!stopCameraRecordingButton.disabled) {
       cameras.stopCameraRecording(camerasSelect.value);
@@ -159,18 +169,29 @@ document.addEventListener('DOMContentLoaded', () => {
     cameras.stopCamera(camerasSelect.value);
   });
 
-  getVideoCaptureButton.addEventListener('click', () => {
+  captureBlobButton.addEventListener('click', () => {
+
+    cameras.videoCaptureToBlob(camerasSelect.value, videoElement).then(blob => {
+
+      capturedImageContainer.classList.remove('d-none');
+      capturedImage.src = URL.createObjectURL(blob);
+    });
+  });
+
+  captureBase64Button.addEventListener('click', () => {
 
     let
-      capturedImage = cameras.getCaptureFromVideo(
+      capture = cameras.videoCaptureToBase64(
        camerasSelect.value, videoElement);
 
-    if (capturedImage === false) {
+    if (capture === false) {
       alert('An error occur while capturing the image.');
       return;
     }
 
-    window.open(capturedImage);
+    capturedImageContainer.classList.remove('d-none');
+
+    capturedImage.src = capture;
   });
 
   startCameraRecordingButton.addEventListener('click', () => {

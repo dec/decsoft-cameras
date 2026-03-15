@@ -24,7 +24,8 @@
      <button type="button" class="btn btn-secondary" id="pause-camera-button" disabled>Pause Camera</button>
      <button type="button" class="btn btn-secondary" id="resume-camera-button" disabled>Resume Camera</button>
      <button type="button" class="btn btn-secondary" id="stop-camera-button" disabled>Stop Camera</button>
-     <button type="button" class="btn btn-secondary" id="get-video-capture-button" disabled>Get capture</button>
+     <button type="button" class="btn btn-secondary" id="capture-base64-button" disabled>Get capture (Base64)</button>
+     <button type="button" class="btn btn-secondary" id="capture-blob-button" disabled>Get capture (Blob)</button>
      <button type="button" class="btn btn-secondary" id="start-recording-button" disabled>Start recording</button>
      <button type="button" class="btn btn-secondary" id="stop-recording-button" disabled>Stop recording</button>
     </div>
@@ -41,6 +42,9 @@
      <input id="pan-range-input" type="range" class="form-range" disabled>
     </div>
    </form>
+   <div class="mt-4" id="captured-image-container">
+    <img id="captured-image" class="img-fluid">
+   </div>
   </div>
   <script src="decsoft-cameras/decsoft-cameras.js"></script>
   <script src="index.js"></script>

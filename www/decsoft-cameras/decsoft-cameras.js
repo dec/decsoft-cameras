@@ -148,7 +148,7 @@ class DecSoftCameras {
     let
       camera = this.#getCamera(deviceId);
 
-    if (camera === null || camera.stream === null) {
+    if (camera === null || camera.track === null) {
       return false;
     }
 
@@ -160,7 +160,30 @@ class DecSoftCameras {
     }
   }
 
-  getCaptureFromVideo (deviceId, videoElement) {
+  videoCaptureToBlob (deviceId, videoElement) {
+
+    let
+      settings = this.#getCameraSettings(deviceId)
+
+    if (settings === null) {
+      return false;
+    }
+
+    let
+      canvas = document.createElement('canvas'),
+      canvasContext = canvas.getContext('2d');
+
+    canvas.width = settings.width;
+    canvas.height = settings.height;
+
+    canvasContext.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+    return new Promise((resolve) => {
+      canvas.toBlob(blob => resolve(blob), 'image/png', 1);
+    });
+  }
+
+  videoCaptureToBase64 (deviceId, videoElement) {
 
     let
       settings = this.#getCameraSettings(deviceId)
