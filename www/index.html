@@ -29,17 +29,65 @@
      <button type="button" class="btn btn-danger" id="start-recording-button" disabled>Start recording</button>
      <button type="button" class="btn btn-secondary" id="stop-recording-button" disabled>Stop recording</button>
     </div>
-    <div class="mt-4">
-     <label class="form-label" for="zoom-range-input">Zoom:</label>
-     <input id="zoom-range-input" type="range" class="form-range" disabled>
-    </div>
-    <div>
-     <label class="form-label" for="tilt-range-input">Tilt:</label>
-     <input id="tilt-range-input" type="range" class="form-range" disabled>
-    </div>
-    <div>
-     <label class="form-label" for="pan-range-input">Pan:</label>
-     <input id="pan-range-input" type="range" class="form-range" disabled>
+    <div class="row g-4 mt-4">
+     <div class="col-md-4">
+      <div>
+       <label class="form-label" for="zoom-range-input">Zoom:</label>
+       <input id="zoom-range-input" type="range" class="form-range" disabled>
+      </div>
+      <div>
+       <label class="form-label" for="tilt-range-input">Tilt:</label>
+       <input id="tilt-range-input" type="range" class="form-range" disabled>
+      </div>
+      <div>
+       <label class="form-label" for="pan-range-input">Pan:</label>
+       <input id="pan-range-input" type="range" class="form-range" disabled>
+      </div>
+      <div>
+       <label class="form-label" for="frame-rate-range-input">Frame rate:</label>
+       <input id="frame-rate-range-input" type="range" class="form-range" disabled>
+      </div>
+      <div>
+       <label class="form-label" for="brightness-range-input">Brightness:</label>
+       <input id="brightness-range-input" type="range" class="form-range" disabled>
+      </div>
+     </div>
+     <div class="col-md-4">
+      <div>
+       <label class="form-label" for="contrast-range-input">Contrast:</label>
+       <input id="contrast-range-input" type="range" class="form-range" disabled>
+      </div>
+      <div>
+       <label class="form-label" for="color-temperature-range-input">Color temperature:</label>
+       <input id="color-temperature-range-input" type="range" class="form-range" disabled>
+      </div>
+      <div>
+       <label class="form-label" for="saturation-range-input">Saturation:</label>
+       <input id="saturation-range-input" type="range" class="form-range" disabled>
+      </div>
+      <div>
+       <label class="form-label" for="sharpness-range-input">Sharpness:</label>
+       <input id="sharpness-range-input" type="range" class="form-range" disabled>
+      </div>
+      <div>
+       <label class="form-label" for="exposure-time-range-input">Exposure time:</label>
+       <input id="exposure-time-range-input" type="range" class="form-range" disabled>
+      </div>
+     </div>
+     <div class="col-md-4">
+      <div>
+       <label for="exposure-mode-select" class="form-label">Exposure mode:</label>
+       <select id="exposure-mode-select" class="form-select" disabled></select>
+      </div>
+      <div>
+       <label for="resize-mode-select" class="form-label">Resize mode:</label>
+       <select id="resize-mode-select" class="form-select" disabled></select>
+      </div>
+      <div>
+       <label for="white-balance-mode-select" class="form-label">White balance mode:</label>
+       <select id="white-balance-mode-select" class="form-select" disabled></select>
+      </div>
+     </div>
     </div>
    </form>
    <div class="mt-4" id="captured-image-container">
