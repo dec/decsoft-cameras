@@ -11,6 +11,7 @@ class DecSoftCameras {
     return new Promise((resolve, reject) => {
 
       navigator.mediaDevices.getUserMedia({
+        audio: true,
         video: true
        })
        .then((mediaStream) => {
