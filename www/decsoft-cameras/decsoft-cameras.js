@@ -6,6 +6,10 @@ class DecSoftCameras {
 
   #cameras = [];
 
+  #CAPTURE_MIME = 'image/png';
+  #NO_RECORD_ERROR = 'The camera recorder was not started.';
+  #NO_CAMARA_ERROR = 'No camera found with the provided ID.';
+
   initialize () {
 
     return new Promise((resolve, reject) => {
@@ -50,7 +54,7 @@ class DecSoftCameras {
            camera = this.#getCamera(deviceId);
 
         if (camera === null) {
-          reject(new Error("No camera found with the provided ID."));
+          reject(new Error(this.#NO_CAMARA_ERROR));
           return;
         }
 
@@ -166,7 +170,10 @@ class DecSoftCameras {
       settings = this.#getCameraSettings(deviceId)
 
     if (settings === null) {
-      return false;
+
+      return new Promise((resolve, reject) => {
+        reject(new Error(this.#NO_CAMARA_ERROR));
+      });
     }
 
     let
@@ -179,7 +186,7 @@ class DecSoftCameras {
     canvasContext.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
     return new Promise((resolve) => {
-      canvas.toBlob(blob => resolve(blob), 'image/png', 1);
+      canvas.toBlob(blob => resolve(blob), this.#CAPTURE_MIME, 1);
     });
   }
 
@@ -201,7 +208,7 @@ class DecSoftCameras {
 
     canvasContext.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
-    return canvas.toDataURL('image/png', 1);
+    return canvas.toDataURL(this.#CAPTURE_MIME, 1);
   }
 
   startCameraRecording (deviceId) {
@@ -235,7 +242,7 @@ class DecSoftCameras {
     if (camera === null || camera.recorder === null) {
 
       return new Promise((resolve, reject) => {
-        reject(new Error('The recorder was not started.'));
+        reject(new Error(this.#NO_RECORD_ERROR));
       });
     }
 

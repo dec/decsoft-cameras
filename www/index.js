@@ -171,11 +171,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   captureBlobButton.addEventListener('click', () => {
 
-    cameras.videoCaptureToBlob(camerasSelect.value, videoElement).then(blob => {
+    cameras.videoCaptureToBlob(camerasSelect.value, videoElement)
+      .then(blob => {
 
-      capturedImageContainer.classList.remove('d-none');
-      capturedImage.src = URL.createObjectURL(blob);
-    });
+        capturedImageContainer.classList.remove('d-none');
+        capturedImage.src = URL.createObjectURL(blob);
+      })
+      .catch(error => alert(error.message));
   });
 
   captureBase64Button.addEventListener('click', () => {
