@@ -36,30 +36,6 @@ class DecSoftCameras {
     });
   }
 
-  getCameraSettings (deviceId) {
-
-    let
-      camera = this.#getCamera(deviceId);
-
-    if (camera === null) {
-      return null;
-    }
-
-    return camera.settings;
-  }
-
-  getCameraCapabilities (deviceId) {
-
-    let
-      camera = this.#getCamera(deviceId);
-
-    if (camera === null) {
-      return null;
-    }
-
-    return camera.capabilities;
-  }
-
   startCamera (deviceId) {
 
     return new Promise((resolve, reject) => {
@@ -91,6 +67,23 @@ class DecSoftCameras {
          reject(error);
        });
     });
+  }
+
+  getCameraSettings (deviceId) {
+
+    return this.#getCameraSettings(deviceId);
+  }
+
+  getCameraCapabilities (deviceId) {
+
+    let
+      camera = this.#getCamera(deviceId);
+
+    if (camera === null) {
+      return null;
+    }
+
+    return camera.capabilities;
   }
 
   pauseCamera (deviceId) {
@@ -165,6 +158,27 @@ class DecSoftCameras {
     } catch {
       return false;
     }
+  }
+
+  getCaptureFromVideo (deviceId, videoElement) {
+
+    let
+      settings = this.#getCameraSettings(deviceId)
+
+    if (settings === null) {
+      return false;
+    }
+
+    let
+      canvas = document.createElement('canvas'),
+      canvasContext = canvas.getContext('2d');
+
+    canvas.width = settings.width;
+    canvas.height = settings.height;
+
+    canvasContext.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+    return canvas.toDataURL('image/png', 1);
   }
 
   startCameraRecording (deviceId) {
@@ -276,6 +290,18 @@ class DecSoftCameras {
           reject(error);
         });
     });
+  }
+
+  #getCameraSettings (deviceId) {
+
+    let
+      camera = this.#getCamera(deviceId);
+
+    if (camera === null) {
+      return null;
+    }
+
+    return camera.settings;
   }
 
   #initCameraObject () {

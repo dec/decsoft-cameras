@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     videoCameraContainer = document.getElementById('video-camera-container'),
     initCamerasButton = document.getElementById('initialize-cameras-button'),
     camerasStuffContainer = document.getElementById('camera-stuff-container'),
+    getVideoCaptureButton = document.getElementById('get-video-capture-button'),
     stopCameraRecordingButton = document.getElementById('stop-recording-button'),
     startCameraRecordingButton = document.getElementById('start-recording-button'),
     camerasInitializeContainer = document.getElementById('cameras-initialize-container');
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   stopCameraButton.disabled = true;
   pauseCameraButton.disabled = true;
   resumeCameraButton.disabled = true;
+  getVideoCaptureButton.disabled = true;
   stopCameraRecordingButton.disabled = true;
   startCameraRecordingButton.disabled = true;
 
@@ -63,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
      stopCameraButton.disabled = true;
      pauseCameraButton.disabled = true;
      resumeCameraButton.disabled = true;
+     getVideoCaptureButton.disabled = true;
      stopCameraRecordingButton.disabled = true;
      startCameraRecordingButton.disabled = true;
 
@@ -73,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
          stopCameraButton.disabled = false;
          pauseCameraButton.disabled = false;
+         getVideoCaptureButton.disabled = false;
          startCameraRecordingButton.disabled = false;
          videoCameraContainer.classList.remove('d-none');
 
@@ -152,6 +156,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     cameras.stopCamera(camerasSelect.value);
+  });
+
+  getVideoCaptureButton.addEventListener('click', () => {
+
+    let
+      capturedImage = cameras.getCaptureFromVideo(
+       camerasSelect.value, videoElement);
+
+    if (capturedImage === false) {
+      alert('An error occur while capturing the image.');
+      return;
+    }
+
+    window.open(capturedImage);
   });
 
   startCameraRecordingButton.addEventListener('click', () => {
