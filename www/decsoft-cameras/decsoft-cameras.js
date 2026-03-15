@@ -127,6 +127,10 @@ class DecSoftCameras {
       return;
     }
 
+    if (camera.recorder !== null) {
+      camera.recorder.stop();
+    }
+
     camera.stream.getTracks().forEach((track) => {
       track.stop();
     });
@@ -139,6 +143,10 @@ class DecSoftCameras {
     this.#cameras.forEach(camera => {
 
       if (camera.stream !== null) {
+
+        if (camera.recorder !== null) {
+          camera.recorder.stop();
+        }
 
         camera.stream.getTracks().forEach((track) => {
           track.stop();
