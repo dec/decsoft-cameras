@@ -148,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
     stopCameraButton.disabled = true;
     pauseCameraButton.disabled = true;
     resumeCameraButton.disabled = true;
+    getVideoCaptureButton.disabled = true;
     stopCameraRecordingButton.disabled = true;
     startCameraRecordingButton.disabled = true;
 
