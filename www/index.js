@@ -1,39 +1,23 @@
 
-let
-  cameras = new DecSoftCameras(),
-  videoElement = null,
-  camerasSelect = null,
-  panRangeInput = null,
-  zoomRangeInput = null,
-  tiltRangeInput = null,
-  stopCameraButton = null,
-  pauseCameraButton = null,
-  initCamerasButton = null,
-  startCameraButton = null,
-  resumeCameraButton = null,
-  videoCameraContainer = null,
-  camerasStuffContainer = null,
-  stopCameraRecordingButton = null,
-  startCameraRecordingButton = null,
-  camerasInitializeContainer = null;
-
 document.addEventListener('DOMContentLoaded', () => {
 
-  videoElement = document.getElementById('video-camera'),
-  camerasSelect = document.getElementById('cameras-select'),
-  panRangeInput = document.getElementById('pan-range-input'),
-  zoomRangeInput = document.getElementById('zoom-range-input'),
-  tiltRangeInput = document.getElementById('tilt-range-input'),
-  stopCameraButton = document.getElementById('stop-camera-button'),
-  pauseCameraButton = document.getElementById('pause-camera-button'),
-  startCameraButton = document.getElementById('start-camera-button'),
-  resumeCameraButton = document.getElementById('resume-camera-button'),
-  videoCameraContainer = document.getElementById('video-camera-container'),
-  initCamerasButton = document.getElementById('initialize-cameras-button'),
-  camerasStuffContainer = document.getElementById('camera-stuff-container'),
-  stopCameraRecordingButton = document.getElementById('stop-recording-button'),
-  startCameraRecordingButton = document.getElementById('start-recording-button'),
-  camerasInitializeContainer = document.getElementById('cameras-initialize-container');
+  let
+    cameras = new DecSoftCameras(),
+    videoElement = document.getElementById('video-camera'),
+    camerasSelect = document.getElementById('cameras-select'),
+    panRangeInput = document.getElementById('pan-range-input'),
+    zoomRangeInput = document.getElementById('zoom-range-input'),
+    tiltRangeInput = document.getElementById('tilt-range-input'),
+    stopCameraButton = document.getElementById('stop-camera-button'),
+    pauseCameraButton = document.getElementById('pause-camera-button'),
+    startCameraButton = document.getElementById('start-camera-button'),
+    resumeCameraButton = document.getElementById('resume-camera-button'),
+    videoCameraContainer = document.getElementById('video-camera-container'),
+    initCamerasButton = document.getElementById('initialize-cameras-button'),
+    camerasStuffContainer = document.getElementById('camera-stuff-container'),
+    stopCameraRecordingButton = document.getElementById('stop-recording-button'),
+    startCameraRecordingButton = document.getElementById('start-recording-button'),
+    camerasInitializeContainer = document.getElementById('cameras-initialize-container');
 
   panRangeInput.disabled = true;
   tiltRangeInput.disabled = true;
