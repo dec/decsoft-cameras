@@ -31,7 +31,7 @@ class DecSoftCameras {
            track.stop();
         });
 
-         this.#getDevices()
+         this.#getDevices(includeMicrophones)
            .then((devices) => {
 
              resolve(devices);
