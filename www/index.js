@@ -32,6 +32,7 @@
     whiteBalanceModeSelect = null,
     echoCancellationSwitch = null,
     noiseSuppressionSwitch = null,
+    includeMicrophonesSwitch = null,
     stopCameraRecordingButton = null,
     startCameraRecordingButton = null,
     colorTemperatureRangeInput = null;
@@ -99,15 +100,18 @@ document.addEventListener('DOMContentLoaded', () => {
     exposureTimeRangeInput = document.getElementById('exposure-time-range-input'),
     whiteBalanceModeSelect = document.getElementById('white-balance-mode-select'),
     startCameraRecordingButton = document.getElementById('start-recording-button'),
+    includeMicrophonesSwitch = document.getElementById('include-microphones-switch'),
     colorTemperatureRangeInput = document.getElementById('color-temperature-range-input');
 
   resetControls();
 
-  getDevicesButton.addEventListener('click', () => {
+  getDevicesButton.addEventListener('click', (event) => {
+
+    event.preventDefault();
 
     devicesContainer.classList.add('d-none');
 
-    cameras.getDevices(true)
+    cameras.getDevices(includeMicrophonesSwitch.checked)
       .then((devices) => {
 
         devicesStuffContainer.classList.remove('d-none');

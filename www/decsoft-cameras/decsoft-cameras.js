@@ -410,6 +410,9 @@ class DecSoftCameras {
 
   #getDevices () {
 
+    this.#devices.cameras = [];
+    this.#devices.microphones = [];
+
     return new Promise((resolve, reject) => {
 
       navigator.mediaDevices
@@ -418,7 +421,7 @@ class DecSoftCameras {
 
           devices.forEach((device) => {
 
-            if (device.kind === 'videoinput') {
+            if (device.kind === 'videoinput' && device.deviceId !== '') {
 
               let
                 camera = this.#initCameraObject();
@@ -428,7 +431,7 @@ class DecSoftCameras {
               this.#devices.cameras.push(camera);
             }
 
-            if (device.kind === 'audioinput') {
+            if (device.kind === 'audioinput' && device.deviceId !== '') {
 
               let
                 microphone = this.#initMicrophoneObject();
