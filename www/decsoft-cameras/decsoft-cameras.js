@@ -267,7 +267,8 @@ class DecSoftCameras {
     canvas.width = settings.width;
     canvas.height = settings.height;
 
-    canvasContext.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    canvasContext.drawImage(videoElement, 0, 0,
+     canvas.width, canvas.height);
 
     return new Promise((resolve) => {
       canvas.toBlob(blob => resolve(blob), this.#CAPTURE_MIME, 1);
@@ -300,7 +301,8 @@ class DecSoftCameras {
     canvas.width = settings.width;
     canvas.height = settings.height;
 
-    canvasContext.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    canvasContext.drawImage(videoElement, 0, 0,
+     canvas.width, canvas.height);
 
     return new Promise((resolve) => {
       resolve(canvas.toDataURL(this.#CAPTURE_MIME, 1));
@@ -410,8 +412,7 @@ class DecSoftCameras {
 
     return new Promise((resolve, reject) => {
 
-      navigator.mediaDevices
-        .enumerateDevices()
+      navigator.mediaDevices.enumerateDevices()
         .then((devices) => {
 
           devices.forEach((device) => {
