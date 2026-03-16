@@ -255,7 +255,7 @@ class DecSoftCameras {
     }
 
     let
-      settings = this.#getCameraSettings(deviceId)
+      settings = this.#getCameraSettings(deviceId);
 
     if (settings === null) {
 
@@ -288,7 +288,7 @@ class DecSoftCameras {
     }
 
     let
-      settings = this.#getCameraSettings(deviceId)
+      settings = this.#getCameraSettings(deviceId);
 
     if (settings === null) {
 
