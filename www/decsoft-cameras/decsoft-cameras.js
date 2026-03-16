@@ -49,6 +49,16 @@ class DecSoftCameras {
     });
   }
 
+  getCamerasCount () {
+
+    return this.#devices.cameras.length;
+  }
+
+  getMicrophonesCount () {
+
+    return this.#devices.microphones.length;
+  }
+
   startCamera (cameraDeviceId, microphoneDeviceId) {
 
     return new Promise((resolve, reject) => {
