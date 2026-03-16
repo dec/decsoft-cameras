@@ -49,14 +49,14 @@ class DecSoftCameras {
     });
   }
 
-  getCamerasCount () {
+  getCameras () {
 
-    return this.#devices.cameras.length;
+    return this.#devices.cameras;
   }
 
-  getMicrophonesCount () {
+  getMicrophones () {
 
-    return this.#devices.microphones.length;
+    return this.#devices.microphones;
   }
 
   startCamera (cameraDeviceId, microphoneDeviceId) {
