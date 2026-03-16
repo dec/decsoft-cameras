@@ -406,7 +406,7 @@ class DecSoftCameras {
     return null;
   }
 
-  #getDevices () {
+  #getDevices (includeMicrophones = false) {
 
     this.#initDevices();
 
@@ -427,17 +427,19 @@ class DecSoftCameras {
                 camera = this.#initCameraObject();
 
               camera.id = device.deviceId;
-              camera.label = device.label || `Camera ${cameraNum}`;
+              camera.label = device.label.trim() !== '' ? device.label : `Camera ${cameraNum}`;
+
               this.#devices.cameras.push(camera);
             }
 
-            if (device.kind === 'audioinput' && device.deviceId !== '') {
+            if (includeMicrophones && device.kind === 'audioinput' && device.deviceId !== '') {
 
               let
                 microphone = this.#initMicrophoneObject();
 
               microphone.id = device.deviceId;
-              microphone.label = device.label || `Microphone ${microphoneNum}`;
+              microphone.label = device.label.trim() !== '' ? device.label : `Microphone ${microphoneNum}`;
+
               this.#devices.microphones.push(microphone);
             }
 
