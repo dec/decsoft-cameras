@@ -18,7 +18,7 @@ class DecSoftCameras {
     this.#devices.microphones = [];
   }
 
-  initialize () {
+  getDevices (includeMicrophones = false) {
 
     this.#devices.cameras = [];
     this.#devices.microphones = [];
@@ -27,7 +27,7 @@ class DecSoftCameras {
 
       navigator.mediaDevices.getUserMedia({
         video: true,
-        audio: true
+        audio: includeMicrophones
        })
        .then((mediaStream) => {
 

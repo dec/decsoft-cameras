@@ -9,8 +9,9 @@
     zoomRangeInput = null,
     tiltRangeInput = null,
     resizeModeSelect = null,
+    devicesContainer = null,
     stopCameraButton = null,
-    initDevicesButton = null,
+    getDevicesButton = null,
     microphonesSelect = null,
     pauseCameraButton = null,
     captureBlobButton = null,
@@ -33,7 +34,6 @@
     noiseSuppressionSwitch = null,
     stopCameraRecordingButton = null,
     startCameraRecordingButton = null,
-    devicesInitializeContainer = null,
     colorTemperatureRangeInput = null;
 
 
@@ -73,6 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
     panRangeInput = document.getElementById('pan-range-input'),
     zoomRangeInput = document.getElementById('zoom-range-input'),
     tiltRangeInput = document.getElementById('tilt-range-input'),
+    devicesContainer = document.getElementById('devices-container'),
+    getDevicesButton = document.getElementById('get-devices-button'),
     resizeModeSelect = document.getElementById('resize-mode-select'),
     stopCameraButton = document.getElementById('stop-camera-button'),
     microphonesSelect = document.getElementById('microphones-select'),
@@ -87,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
     frameRateRangeInput = document.getElementById('frame-rate-range-input'),
     brightnessRangeInput = document.getElementById('brightness-range-input'),
     videoCameraContainer = document.getElementById('video-camera-container'),
-    initDevicesButton = document.getElementById('initialize-devices-button'),
     saturationRangeInput = document.getElementById('saturation-range-input'),
     devicesStuffContainer = document.getElementById('devices-stuff-container'),
     autoGainControlSwitch = document.getElementById('auto-gain-control-switch'),
@@ -98,16 +99,15 @@ document.addEventListener('DOMContentLoaded', () => {
     exposureTimeRangeInput = document.getElementById('exposure-time-range-input'),
     whiteBalanceModeSelect = document.getElementById('white-balance-mode-select'),
     startCameraRecordingButton = document.getElementById('start-recording-button'),
-    devicesInitializeContainer = document.getElementById('devices-initialize-container'),
     colorTemperatureRangeInput = document.getElementById('color-temperature-range-input');
 
   resetControls();
 
-  initDevicesButton.addEventListener('click', () => {
+  getDevicesButton.addEventListener('click', () => {
 
-    devicesInitializeContainer.classList.add('d-none');
+    devicesContainer.classList.add('d-none');
 
-    cameras.initialize()
+    cameras.getDevices(true)
       .then((devices) => {
 
         devicesStuffContainer.classList.remove('d-none');
