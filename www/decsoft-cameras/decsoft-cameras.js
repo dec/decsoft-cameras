@@ -291,7 +291,10 @@ class DecSoftCameras {
       settings = this.#getCameraSettings(deviceId)
 
     if (settings === null) {
-      return false;
+
+      return new Promise((resolve, reject) => {
+        reject(new Error(this.#NO_CAMERA_ERROR));
+      });
     }
 
     let
@@ -303,7 +306,9 @@ class DecSoftCameras {
 
     canvasContext.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
-    return canvas.toDataURL(this.#CAPTURE_MIME, 1);
+    return new Promise((resolve) => {
+      resolve(canvas.toDataURL(this.#CAPTURE_MIME, 1));
+    });
   }
 
   startCameraRecording (deviceId) {

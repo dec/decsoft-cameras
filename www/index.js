@@ -437,18 +437,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   captureBase64Button.addEventListener('click', () => {
 
-    let
-      capture = cameras.videoCaptureToBase64(
-       camerasSelect.value, videoElement);
+    cameras.videoCaptureToBase64(camerasSelect.value, videoElement)
+      .then(base64 => {
 
-    if (capture === false) {
-      alert('An error occur while capturing the image.');
-      return;
-    }
-
-    capturedImageContainer.classList.remove('d-none');
-
-    capturedImage.src = capture;
+        capturedImageContainer.classList.remove('d-none');
+        capturedImage.src = base64;
+      })
+      .catch(error => alert(error.message));
   });
 
   startCameraRecordingButton.addEventListener('click', () => {
