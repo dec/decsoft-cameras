@@ -4,7 +4,10 @@
 
 class DecSoftCameras {
 
-  #devices = {};
+  #devices = {
+    cameras: [],
+    microphones: []
+  };
 
   #CAPTURE_MIME = 'image/png';
   #NO_VID_ERROR = 'No video element provided.';
@@ -12,16 +15,9 @@ class DecSoftCameras {
   #NO_CAM_ERROR = 'No camera found with the provided ID.';
   #NO_MIC_ERROR = 'No microphone found with the provided ID.';
 
-  constructor () {
-
-    this.#devices.cameras = [];
-    this.#devices.microphones = [];
-  }
-
   getDevices (includeMicrophones = false) {
 
-    this.#devices.cameras = [];
-    this.#devices.microphones = [];
+    this.#initDevices();
 
     return new Promise((resolve, reject) => {
 
@@ -410,8 +406,7 @@ class DecSoftCameras {
 
   #getDevices () {
 
-    this.#devices.cameras = [];
-    this.#devices.microphones = [];
+    this.#initDevices();
 
     return new Promise((resolve, reject) => {
 
@@ -473,6 +468,12 @@ class DecSoftCameras {
     }
 
     return microphone.settings;
+  }
+
+  #initDevices () {
+
+    this.#devices.cameras = [];
+    this.#devices.microphones = [];
   }
 
   #initCameraObject () {
