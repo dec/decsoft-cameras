@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch((error) => {
 
         devicesStuffContainer.classList.remove('d-none');
-        devicesStuffContainer.innerHTML = `Error initializing devices: ${error.message}. <br> Please, refresh this page if you block the permissions.`;
+        devicesStuffContainer.innerHTML = `Error initializing devices: ${error.message} <br> Please, refresh this page if you block the permissions.`;
       });
   });
 
