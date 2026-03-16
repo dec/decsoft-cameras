@@ -4,19 +4,26 @@
 
 class DecSoftCameras {
 
-  #cameras = [];
+  #devices = {};
 
   #CAPTURE_MIME = 'image/png';
   #NO_RECORD_ERROR = 'The camera recorder was not started.';
   #NO_CAMARA_ERROR = 'No camera found with the provided ID.';
+  #NO_MICROPHONE_ERROR = 'No microphone found with the provided ID.';
+
+  constructor () {
+
+    this.#devices.cameras = [];
+    this.#devices.microphones = [];
+  }
 
   initialize () {
 
     return new Promise((resolve, reject) => {
 
       navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true
+        video: true,
+        audio: true
        })
        .then((mediaStream) => {
 
@@ -24,11 +31,13 @@ class DecSoftCameras {
            track.stop();
         });
 
-         this.#getCameras()
-           .then((cameraDevices) => {
-             resolve(cameraDevices);
+         this.#getDevices()
+           .then((devices) => {
+
+             resolve(devices);
            })
            .catch(error => {
+
              reject(error);
            });
 
@@ -40,29 +49,45 @@ class DecSoftCameras {
     });
   }
 
-  startCamera (deviceId) {
+  startCamera (cameraDeviceId, microphoneDeviceId) {
 
     return new Promise((resolve, reject) => {
 
       navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: {deviceId: deviceId}
+        video: {deviceId: cameraDeviceId},
+        audio: microphoneDeviceId !== false ? {deviceId: microphoneDeviceId} : false
        })
        .then((mediaStream) => {
 
          let
-           camera = this.#getCamera(deviceId);
+           camera = this.#getCamera(cameraDeviceId);
 
         if (camera === null) {
           reject(new Error(this.#NO_CAMARA_ERROR));
           return;
         }
 
+         camera.stream = mediaStream;
          camera.track = mediaStream.getVideoTracks()[0];
          camera.settings = camera.track.getSettings();
          camera.capabilities = camera.track.getCapabilities();
 
-         camera.stream = mediaStream;
+         if (microphoneDeviceId !== false) {
+
+           let
+             microphone = this.#getMicrophone(microphoneDeviceId);
+
+           if (microphone === null) {
+
+             reject(new Error(this.#NO_MICROPHONE_ERROR));
+             return;
+           }
+
+           microphone.track = mediaStream.getAudioTracks()[0];
+           microphone.settings = microphone.track.getSettings();
+           microphone.capabilities = microphone.track.getCapabilities();
+         }
+
          resolve(camera.stream);
 
        })
@@ -140,7 +165,7 @@ class DecSoftCameras {
 
   stopCameras () {
 
-    this.#cameras.forEach(camera => {
+    this.#devices.cameras.forEach(camera => {
 
       if (camera.stream !== null) {
 
@@ -170,6 +195,40 @@ class DecSoftCameras {
     } catch {
       return false;
     }
+  }
+
+  applyMicrophoneConstraints (deviceId, constraints) {
+
+    let
+      microphone = this.#getMicrophone(deviceId);
+
+    if (microphone === null || microphone.track === null) {
+      return false;
+    }
+
+    try {
+      microphone.track.applyConstraints(constraints);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  getMicrophoneSettings (deviceId) {
+
+    return this.#getMicrophoneSettings(deviceId);
+  }
+
+  getMicrophoneCapabilities (deviceId) {
+
+    let
+      microphone = this.#getMicrophone(deviceId);
+
+    if (microphone === null) {
+      return null;
+    }
+
+    return microphone.capabilities;
   }
 
   videoCaptureToBlob (deviceId, videoElement) {
@@ -290,18 +349,31 @@ class DecSoftCameras {
 
   #getCamera (deviceId) {
 
-    for (let i = 0; i < this.#cameras.length; i++) {
+    for (let i = 0; i < this.#devices.cameras.length; i++) {
 
-      if (this.#cameras[i].id = deviceId) {
+      if (this.#devices.cameras[i].id = deviceId) {
 
-        return this.#cameras[i];
+        return this.#devices.cameras[i];
       }
     }
 
     return null;
   }
 
-  #getCameras () {
+  #getMicrophone (deviceId) {
+
+    for (let i = 0; i < this.#devices.microphones.length; i++) {
+
+      if (this.#devices.microphones[i].id = deviceId) {
+
+        return this.#devices.microphones[i];
+      }
+    }
+
+    return null;
+  }
+
+  #getDevices () {
 
     return new Promise((resolve, reject) => {
 
@@ -318,13 +390,24 @@ class DecSoftCameras {
 
               camera.id = device.deviceId;
               camera.label = device.label || device.deviceId;
-              this.#cameras.push(camera);
+              this.#devices.cameras.push(camera);
+            }
+
+            if (device.kind === 'audioinput') {
+
+              let
+                microphone = this.#initMicrophoneObject();
+
+              microphone.id = device.deviceId;
+              microphone.label = device.label || device.deviceId;
+              this.#devices.microphones.push(microphone);
             }
           });
 
-          resolve(this.#cameras);
+          resolve(this.#devices);
         })
         .catch((error) => {
+
           reject(error);
         });
     });
@@ -342,6 +425,18 @@ class DecSoftCameras {
     return camera.settings;
   }
 
+  #getMicrophoneSettings (deviceId) {
+
+    let
+      microphone = this.#getMicrophone(deviceId);
+
+    if (microphone === null) {
+      return null;
+    }
+
+    return microphone.settings;
+  }
+
   #initCameraObject () {
 
     return {
@@ -352,6 +447,17 @@ class DecSoftCameras {
       recChunks: [],
       settings: null,
       recorder: null,
+      capabilities: null
+    };
+  }
+
+  #initMicrophoneObject () {
+
+    return {
+      id: '',
+      label: '',
+      track: null,
+      settings: null,
       capabilities: null
     };
   }

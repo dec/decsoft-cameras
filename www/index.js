@@ -10,7 +10,8 @@
     tiltRangeInput = null,
     resizeModeSelect = null,
     stopCameraButton = null,
-    initCamerasButton = null,
+    initDevicesButton = null,
+    microphonesSelect = null,
     pauseCameraButton = null,
     captureBlobButton = null,
     startCameraButton = null,
@@ -23,14 +24,18 @@
     videoCameraContainer = null,
     brightnessRangeInput = null,
     saturationRangeInput = null,
-    camerasStuffContainer = null,
+    devicesStuffContainer = null,
+    autoGainControlSwitch = null,
     capturedImageContainer = null,
     exposureTimeRangeInput = null,
     whiteBalanceModeSelect = null,
+    echoCancellationSwitch = null,
+    noiseSuppressionSwitch = null,
     stopCameraRecordingButton = null,
     startCameraRecordingButton = null,
-    camerasInitializeContainer = null,
+    devicesInitializeContainer = null,
     colorTemperatureRangeInput = null;
+
 
 function resetControls () {
 
@@ -49,6 +54,9 @@ function resetControls () {
   frameRateRangeInput.disabled = true;
   saturationRangeInput.disabled = true;
   brightnessRangeInput.disabled = true;
+  autoGainControlSwitch.disabled = true;
+  echoCancellationSwitch.disabled = true;
+  noiseSuppressionSwitch.disabled = true;
   whiteBalanceModeSelect.disabled = true;
   exposureTimeRangeInput.disabled = true;
   stopCameraRecordingButton.disabled = true;
@@ -67,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tiltRangeInput = document.getElementById('tilt-range-input'),
     resizeModeSelect = document.getElementById('resize-mode-select'),
     stopCameraButton = document.getElementById('stop-camera-button'),
+    microphonesSelect = document.getElementById('microphones-select'),
     pauseCameraButton = document.getElementById('pause-camera-button'),
     captureBlobButton = document.getElementById('capture-blob-button'),
     startCameraButton = document.getElementById('start-camera-button'),
@@ -78,29 +87,32 @@ document.addEventListener('DOMContentLoaded', () => {
     frameRateRangeInput = document.getElementById('frame-rate-range-input'),
     brightnessRangeInput = document.getElementById('brightness-range-input'),
     videoCameraContainer = document.getElementById('video-camera-container'),
-    initCamerasButton = document.getElementById('initialize-cameras-button'),
+    initDevicesButton = document.getElementById('initialize-devices-button'),
     saturationRangeInput = document.getElementById('saturation-range-input'),
-    camerasStuffContainer = document.getElementById('camera-stuff-container'),
+    devicesStuffContainer = document.getElementById('devices-stuff-container'),
+    autoGainControlSwitch = document.getElementById('auto-gain-control-switch'),
+    echoCancellationSwitch = document.getElementById('echo-cancellation-switch'),
+    noiseSuppressionSwitch = document.getElementById('noise-suppression-switch'),
     capturedImageContainer = document.getElementById('captured-image-container'),
     stopCameraRecordingButton = document.getElementById('stop-recording-button'),
     exposureTimeRangeInput = document.getElementById('exposure-time-range-input'),
     whiteBalanceModeSelect = document.getElementById('white-balance-mode-select'),
     startCameraRecordingButton = document.getElementById('start-recording-button'),
-    camerasInitializeContainer = document.getElementById('cameras-initialize-container'),
+    devicesInitializeContainer = document.getElementById('devices-initialize-container'),
     colorTemperatureRangeInput = document.getElementById('color-temperature-range-input');
 
   resetControls();
 
-  initCamerasButton.addEventListener('click', () => {
+  initDevicesButton.addEventListener('click', () => {
 
-    camerasInitializeContainer.classList.add('d-none');
+    devicesInitializeContainer.classList.add('d-none');
 
     cameras.initialize()
-      .then(cameraDevices => {
+      .then((devices) => {
 
-        camerasStuffContainer.classList.remove('d-none');
+        devicesStuffContainer.classList.remove('d-none');
 
-        cameraDevices.forEach(cameraDevice => {
+        devices.cameras.forEach(cameraDevice => {
 
           let
             option = document.createElement('option');
@@ -110,11 +122,21 @@ document.addEventListener('DOMContentLoaded', () => {
           camerasSelect.appendChild(option);
         });
 
+        devices.microphones.forEach(microphoneDevice => {
+
+          let
+            option = document.createElement('option');
+
+          option.value = microphoneDevice.id;
+          option.text = microphoneDevice.label;
+          microphonesSelect.appendChild(option);
+        });
+
       })
       .catch((error) => {
 
-        camerasStuffContainer.classList.remove('d-none');
-        camerasStuffContainer.innerHTML = `Error initializing cameras: ${error.message}. <br> Please, refresh this page if you block the permissions.`;
+        devicesStuffContainer.classList.remove('d-none');
+        devicesStuffContainer.innerHTML = `Error initializing cameras: ${error.message}. <br> Please, refresh this page if you block the permissions.`;
       });
   });
 
@@ -124,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
      cameras.stopCameras();
 
-     cameras.startCamera(camerasSelect.value)
+     cameras.startCamera(camerasSelect.value, microphonesSelect.value !== '' ? microphonesSelect.value : false)
        .then((mediaStream) => {
 
          stopCameraButton.disabled = false;
@@ -141,21 +163,32 @@ document.addEventListener('DOMContentLoaded', () => {
          videoElement.srcObject = mediaStream;
          videoElement.play();
 
-         ['zoom', 'tilt', 'pan'].forEach(capability => {
+         if (videoCapabilities.zoom !== undefined) {
 
-           if (videoCapabilities[capability] === undefined) {
+           zoomRangeInput.disabled = false;
+           zoomRangeInput.value = videoSettings.zoom;
+           zoomRangeInput.min = videoCapabilities.zoom.min;
+           zoomRangeInput.max = videoCapabilities.zoom.max;
+           zoomRangeInput.step = videoCapabilities.zoom.step;
+         }
 
-             document.getElementById(`${capability}-range-input`).disabled = true;
+         if (videoCapabilities.tilt !== undefined) {
 
-           } else {
+           tiltRangeInput.disabled = false;
+           tiltRangeInput.value = videoSettings.tilt;
+           tiltRangeInput.min = videoCapabilities.tilt.min;
+           tiltRangeInput.max = videoCapabilities.tilt.max;
+           tiltRangeInput.step = videoCapabilities.tilt.step;
+         }
 
-             document.getElementById(`${capability}-range-input`).disabled = false;
-             document.getElementById(`${capability}-range-input`).value = videoSettings[capability];
-             document.getElementById(`${capability}-range-input`).min = videoCapabilities[capability].min;
-             document.getElementById(`${capability}-range-input`).max = videoCapabilities[capability].max;
-             document.getElementById(`${capability}-range-input`).step = videoCapabilities[capability].step;
-           }
-         });
+         if (videoCapabilities.pan !== undefined) {
+
+           panRangeInput.disabled = false;
+           panRangeInput.value = videoSettings.pan;
+           panRangeInput.min = videoCapabilities.pan.min;
+           panRangeInput.max = videoCapabilities.pan.max;
+           panRangeInput.step = videoCapabilities.pan.step;
+         }
 
          if (videoCapabilities.frameRate !== undefined) {
 
@@ -266,6 +299,31 @@ document.addEventListener('DOMContentLoaded', () => {
              option.selected = mode === videoSettings.whiteBalanceMode;
              whiteBalanceModeSelect.appendChild(option);
            });
+         }
+
+         if (microphonesSelect.value !== '') {
+
+           let
+             microphoneSettings = cameras.getMicrophoneSettings(microphonesSelect.value),
+             microphoneCapabilities = cameras.getMicrophoneCapabilities(microphonesSelect.value);
+
+           if (microphoneCapabilities.echoCancellation !== undefined) {
+
+             echoCancellationSwitch.disabled = false;
+             echoCancellationSwitch.checked = microphoneSettings.echoCancellation;
+           }
+
+           if (microphoneCapabilities.noiseSuppression !== undefined) {
+
+             noiseSuppressionSwitch.disabled = false;
+             noiseSuppressionSwitch.checked = microphoneSettings.noiseSuppression;
+           }
+
+           if (microphoneCapabilities.autoGainControl !== undefined) {
+
+             autoGainControlSwitch.disabled = false;
+             autoGainControlSwitch.checked = microphoneSettings.autoGainControl;
+           }
          }
        })
        .catch(error => {
@@ -413,6 +471,21 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(error => {
       alert(error);
     });
+  });
+
+  echoCancellationSwitch.addEventListener('input', (event) => {
+
+    cameras.applyMicrophoneConstraints(microphonesSelect.value, {echoCancellation: event.target.checked});
+  });
+
+  noiseSuppressionSwitch.addEventListener('input', (event) => {
+
+    cameras.applyMicrophoneConstraints(microphonesSelect.value, {noiseSuppression: event.target.checked});
+  });
+
+  autoGainControlSwitch.addEventListener('input', (event) => {
+
+    cameras.applyMicrophoneConstraints(microphonesSelect.value, {autoGainControl: event.target.checked});
   });
 
 }); // DOMContentLoaded
