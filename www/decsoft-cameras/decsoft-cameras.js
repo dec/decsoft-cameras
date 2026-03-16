@@ -361,7 +361,7 @@ class DecSoftCameras {
 
     for (let i = 0; i < this.#devices.cameras.length; i++) {
 
-      if (this.#devices.cameras[i].id = deviceId) {
+      if (this.#devices.cameras[i].id === deviceId) {
 
         return this.#devices.cameras[i];
       }
@@ -374,7 +374,7 @@ class DecSoftCameras {
 
     for (let i = 0; i < this.#devices.microphones.length; i++) {
 
-      if (this.#devices.microphones[i].id = deviceId) {
+      if (this.#devices.microphones[i].id === deviceId) {
 
         return this.#devices.microphones[i];
       }
