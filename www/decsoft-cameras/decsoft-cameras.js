@@ -415,6 +415,10 @@ class DecSoftCameras {
       navigator.mediaDevices.enumerateDevices()
         .then((devices) => {
 
+          let
+            cameraNum = 1,
+            microphoneNum = 1;
+
           devices.forEach((device) => {
 
             if (device.kind === 'videoinput' && device.deviceId !== '') {
@@ -423,7 +427,7 @@ class DecSoftCameras {
                 camera = this.#initCameraObject();
 
               camera.id = device.deviceId;
-              camera.label = device.label || device.deviceId;
+              camera.label = device.label || `Camera ${cameraNum}`;
               this.#devices.cameras.push(camera);
             }
 
@@ -433,9 +437,12 @@ class DecSoftCameras {
                 microphone = this.#initMicrophoneObject();
 
               microphone.id = device.deviceId;
-              microphone.label = device.label || device.deviceId;
+              microphone.label = device.label || `Microphone ${microphoneNum}`;
               this.#devices.microphones.push(microphone);
             }
+
+            cameraNum++;
+            microphoneNum++;
           });
 
           resolve(this.#devices);
