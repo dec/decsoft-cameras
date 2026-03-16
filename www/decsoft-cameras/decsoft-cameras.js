@@ -7,10 +7,10 @@ class DecSoftCameras {
   #devices = {};
 
   #CAPTURE_MIME = 'image/png';
-  #NO_VIDEO_ERROR = 'No video element provided.';
-  #NO_RECORD_ERROR = 'The camera recorder was not started.';
-  #NO_CAMERA_ERROR = 'No camera found with the provided ID.';
-  #NO_MICROPHONE_ERROR = 'No microphone found with the provided ID.';
+  #NO_VID_ERROR = 'No video element provided.';
+  #NO_REC_ERROR = 'The camera recorder was not started.';
+  #NO_CAM_ERROR = 'No camera found with the provided ID.';
+  #NO_MIC_ERROR = 'No microphone found with the provided ID.';
 
   constructor () {
 
@@ -77,7 +77,7 @@ class DecSoftCameras {
            camera = this.#getCamera(cameraDeviceId);
 
         if (camera === null) {
-          reject(new Error(this.#NO_CAMERA_ERROR));
+          reject(new Error(this.#NO_CAM_ERROR));
           return;
         }
 
@@ -93,7 +93,7 @@ class DecSoftCameras {
 
            if (microphone === null) {
 
-             reject(new Error(this.#NO_MICROPHONE_ERROR));
+             reject(new Error(this.#NO_MIC_ERROR));
              return;
            }
 
@@ -250,7 +250,7 @@ class DecSoftCameras {
     if (!videoElement) {
 
       return new Promise((resolve, reject) => {
-        reject(new Error(this.#NO_VIDEO_ERROR));
+        reject(new Error(this.#NO_VID_ERROR));
       });
     }
 
@@ -260,7 +260,7 @@ class DecSoftCameras {
     if (settings === null) {
 
       return new Promise((resolve, reject) => {
-        reject(new Error(this.#NO_CAMERA_ERROR));
+        reject(new Error(this.#NO_CAM_ERROR));
       });
     }
 
@@ -283,7 +283,7 @@ class DecSoftCameras {
     if (!videoElement) {
 
       return new Promise((resolve, reject) => {
-        reject(new Error(this.#NO_VIDEO_ERROR));
+        reject(new Error(this.#NO_VID_ERROR));
       });
     }
 
@@ -293,7 +293,7 @@ class DecSoftCameras {
     if (settings === null) {
 
       return new Promise((resolve, reject) => {
-        reject(new Error(this.#NO_CAMERA_ERROR));
+        reject(new Error(this.#NO_CAM_ERROR));
       });
     }
 
@@ -344,7 +344,7 @@ class DecSoftCameras {
     if (camera === null || camera.recorder === null) {
 
       return new Promise((resolve, reject) => {
-        reject(new Error(this.#NO_RECORD_ERROR));
+        reject(new Error(this.#NO_REC_ERROR));
       });
     }
 
