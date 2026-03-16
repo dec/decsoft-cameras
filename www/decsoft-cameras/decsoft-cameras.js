@@ -7,8 +7,9 @@ class DecSoftCameras {
   #devices = {};
 
   #CAPTURE_MIME = 'image/png';
+  #NO_VIDEO_ERROR = 'No video element provided.';
   #NO_RECORD_ERROR = 'The camera recorder was not started.';
-  #NO_CAMARA_ERROR = 'No camera found with the provided ID.';
+  #NO_CAMERA_ERROR = 'No camera found with the provided ID.';
   #NO_MICROPHONE_ERROR = 'No microphone found with the provided ID.';
 
   constructor () {
@@ -18,6 +19,9 @@ class DecSoftCameras {
   }
 
   initialize () {
+
+    this.#devices.cameras = [];
+    this.#devices.microphones = [];
 
     return new Promise((resolve, reject) => {
 
@@ -73,7 +77,7 @@ class DecSoftCameras {
            camera = this.#getCamera(cameraDeviceId);
 
         if (camera === null) {
-          reject(new Error(this.#NO_CAMARA_ERROR));
+          reject(new Error(this.#NO_CAMERA_ERROR));
           return;
         }
 
@@ -243,13 +247,20 @@ class DecSoftCameras {
 
   videoCaptureToBlob (deviceId, videoElement) {
 
+    if (!videoElement) {
+
+      return new Promise((resolve, reject) => {
+        reject(new Error(this.#NO_VIDEO_ERROR));
+      });
+    }
+
     let
       settings = this.#getCameraSettings(deviceId)
 
     if (settings === null) {
 
       return new Promise((resolve, reject) => {
-        reject(new Error(this.#NO_CAMARA_ERROR));
+        reject(new Error(this.#NO_CAMERA_ERROR));
       });
     }
 
@@ -268,6 +279,13 @@ class DecSoftCameras {
   }
 
   videoCaptureToBase64 (deviceId, videoElement) {
+
+    if (!videoElement) {
+
+      return new Promise((resolve, reject) => {
+        reject(new Error(this.#NO_VIDEO_ERROR));
+      });
+    }
 
     let
       settings = this.#getCameraSettings(deviceId)
@@ -309,6 +327,8 @@ class DecSoftCameras {
         camera.recChunks.push(event.data);
       }
     };
+
+    return true;
   }
 
   stopCameraRecording (deviceId) {
