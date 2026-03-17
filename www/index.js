@@ -56,8 +56,11 @@ function resetControls () {
   saturationRangeInput.disabled = true;
   brightnessRangeInput.disabled = true;
   autoGainControlSwitch.disabled = true;
+  autoGainControlSwitch.checked = false;
   echoCancellationSwitch.disabled = true;
+  echoCancellationSwitch.checked = false;
   noiseSuppressionSwitch.disabled = true;
+  noiseSuppressionSwitch.checked = false;
   whiteBalanceModeSelect.disabled = true;
   exposureTimeRangeInput.disabled = true;
   stopCameraRecordingButton.disabled = true;
