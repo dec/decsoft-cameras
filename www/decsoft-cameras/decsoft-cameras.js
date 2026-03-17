@@ -490,8 +490,10 @@ class DecSoftCameras {
 
   #initDevices () {
 
-    this.#devices.cameras = [];
-    this.#devices.microphones = [];
+    this.#devices = {
+      cameras: [],
+      microphones: []
+    };
   }
 
   #initCameraObject () {
