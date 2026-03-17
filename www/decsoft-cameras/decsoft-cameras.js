@@ -312,7 +312,7 @@ class DecSoftCameras {
     canvasContext.drawImage(videoElement, 0, 0,
      canvas.width, canvas.height);
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       resolve(canvas.toDataURL(this.#CAPTURE_MIME, 1));
     });
   }
@@ -421,7 +421,7 @@ class DecSoftCameras {
     return new Promise((resolve, reject) => {
 
       navigator.mediaDevices.enumerateDevices()
-        .then((devices) => {
+        .then(devices => {
 
           let
             cameraNum = 1,
@@ -457,7 +457,7 @@ class DecSoftCameras {
 
           resolve(this.#devices);
         })
-        .catch((error) => {
+        .catch(error => {
 
           reject(error);
         });
