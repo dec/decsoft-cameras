@@ -196,15 +196,22 @@ class DecSoftCameras {
       camera = this.#getCamera(deviceId);
 
     if (camera === null || camera.track === null) {
-      return false;
+
+      return new Promise((resolve, reject) => {
+        reject(new Error(this.#NO_CAM_ERROR));
+      });
     }
 
-    try {
-      camera.track.applyConstraints(constraints);
-      return true;
-    } catch {
-      return false;
-    }
+    return new Promise((resolve, reject) => {
+
+      camera.track.applyConstraints(constraints)
+        .then(() => {
+          resolve();
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   applyMicrophoneConstraints (deviceId, constraints) {
@@ -213,15 +220,22 @@ class DecSoftCameras {
       microphone = this.#getMicrophone(deviceId);
 
     if (microphone === null || microphone.track === null) {
-      return false;
+
+      return new Promise((resolve, reject) => {
+        reject(new Error(this.#NO_MIC_ERROR));
+      });
     }
 
-    try {
-      microphone.track.applyConstraints(constraints);
-      return true;
-    } catch {
-      return false;
-    }
+    return new Promise((resolve, reject) => {
+
+      microphone.track.applyConstraints(constraints)
+        .then(() => {
+          resolve();
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   getMicrophoneSettings (deviceId) {
