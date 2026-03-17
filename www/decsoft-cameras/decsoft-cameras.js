@@ -59,7 +59,7 @@ class DecSoftCameras {
     return this.#devices.microphones;
   }
 
-  startCamera (cameraDeviceId, microphoneDeviceId) {
+  startCamera (cameraDeviceId, microphoneDeviceId = false) {
 
     return new Promise((resolve, reject) => {
 
