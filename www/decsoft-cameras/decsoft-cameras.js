@@ -267,6 +267,10 @@ class DecSoftCameras {
     canvas.width = settings.width;
     canvas.height = settings.height;
 
+    // Mirror the capture?
+    //canvasContext.translate(canvas.width, 0);
+    //canvasContext.scale(-1, 1);
+
     canvasContext.drawImage(videoElement, 0, 0,
      canvas.width, canvas.height);
 
@@ -300,6 +304,10 @@ class DecSoftCameras {
 
     canvas.width = settings.width;
     canvas.height = settings.height;
+
+    // Mirror the capture?
+    //canvasContext.translate(canvas.width, 0);
+    //canvasContext.scale(-1, 1);
 
     canvasContext.drawImage(videoElement, 0, 0,
      canvas.width, canvas.height);
