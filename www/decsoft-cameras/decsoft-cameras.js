@@ -504,8 +504,8 @@ class DecSoftCameras {
       track: null,
       stream: null,
       recChunks: [],
-      settings: null,
       recorder: null,
+      settings: null,
       capabilities: null
     };
   }
