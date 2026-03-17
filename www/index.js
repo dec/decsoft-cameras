@@ -8,6 +8,7 @@
     panRangeInput = null,
     zoomRangeInput = null,
     tiltRangeInput = null,
+    resolutionSelect = null,
     resizeModeSelect = null,
     devicesContainer = null,
     stopCameraButton = null,
@@ -37,12 +38,12 @@
     startCameraRecordingButton = null,
     colorTemperatureRangeInput = null;
 
-
 function resetControls () {
 
   panRangeInput.disabled = true;
   tiltRangeInput.disabled = true;
   zoomRangeInput.disabled = true;
+  resolutionSelect.disabled = true;
   resizeModeSelect.disabled = true;
   stopCameraButton.disabled = true;
   captureBlobButton.disabled = true;
@@ -77,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     panRangeInput = document.getElementById('pan-range-input'),
     zoomRangeInput = document.getElementById('zoom-range-input'),
     tiltRangeInput = document.getElementById('tilt-range-input'),
+    resolutionSelect = document.getElementById('resolution-select'),
     devicesContainer = document.getElementById('devices-container'),
     getDevicesButton = document.getElementById('get-devices-button'),
     resizeModeSelect = document.getElementById('resize-mode-select'),
@@ -108,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   resetControls();
 
-  getDevicesButton.addEventListener('click', (event) => {
+  getDevicesButton.addEventListener('click', event => {
 
     event.preventDefault();
 
@@ -165,10 +167,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
          let
            videoSettings = cameras.getCameraSettings(camerasSelect.value),
-           videoCapabilities = cameras.getCameraCapabilities(camerasSelect.value);
+           videoCapabilities = cameras.getCameraCapabilities(camerasSelect.value),
+           cameraResolutions = cameras.getCameraResolutions(camerasSelect.value);
 
          videoElement.srcObject = mediaStream;
+         videoElement.width = videoSettings.width;
+         videoElement.height = videoSettings.height;
          videoElement.play();
+
+         if (cameraResolutions.length > 0) {
+
+           resolutionSelect.disabled = false;
+
+           cameraResolutions.forEach(size => {
+
+             let
+               option = document.createElement('option');
+
+             option.value = JSON.stringify(size);
+             option.text = `${size.width}x${size.height}`;
+             option.selected = `${size.width}x${size.height}` === `${videoSettings.width}x${videoSettings.height}`;
+             resolutionSelect.appendChild(option);
+           });
+         }
 
          if (videoCapabilities.zoom !== undefined) {
 
@@ -339,67 +360,78 @@ document.addEventListener('DOMContentLoaded', () => {
        });
   });
 
-  zoomRangeInput.addEventListener('input', (event) => {
+  resolutionSelect.addEventListener('change', event => {
+
+    let
+      size = JSON.parse(event.target.value);
+
+    videoElement.width = size.width;
+    videoElement.height = size.height;
+
+    cameras.applyCameraConstraints(camerasSelect.value, {width: size.width, height: size.height});
+  });
+
+  zoomRangeInput.addEventListener('input', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {zoom: event.target.value});
   });
 
-  tiltRangeInput.addEventListener('input', (event) => {
+  tiltRangeInput.addEventListener('input', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {tilt: event.target.value});
   });
 
-  panRangeInput.addEventListener('input', (event) => {
+  panRangeInput.addEventListener('input', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {pan: event.target.value});
   });
 
-  frameRateRangeInput.addEventListener('input', (event) => {
+  frameRateRangeInput.addEventListener('input', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {frameRate: event.target.value});
   });
 
-  brightnessRangeInput.addEventListener('input', (event) => {
+  brightnessRangeInput.addEventListener('input', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {brightness: event.target.value});
   });
 
-  contrastRangeInput.addEventListener('input', (event) => {
+  contrastRangeInput.addEventListener('input', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {contrast: event.target.value});
   });
 
-  colorTemperatureRangeInput.addEventListener('input', (event) => {
+  colorTemperatureRangeInput.addEventListener('input', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {colorTemperature: event.target.value});
   });
 
-  saturationRangeInput.addEventListener('input', (event) => {
+  saturationRangeInput.addEventListener('input', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {saturation: event.target.value});
   });
 
-  sharpnessRangeInput.addEventListener('input', (event) => {
+  sharpnessRangeInput.addEventListener('input', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {sharpness: event.target.value});
   });
 
-  exposureTimeRangeInput.addEventListener('input', (event) => {
+  exposureTimeRangeInput.addEventListener('input', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {exposureTime: event.target.value});
   });
 
-  exposureModeSelect.addEventListener('change', (event) => {
+  exposureModeSelect.addEventListener('change', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {exposureMode: event.target.value});
   });
 
-  resizeModeSelect.addEventListener('change', (event) => {
+  resizeModeSelect.addEventListener('change', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {resizeMode: event.target.value});
   });
 
-  whiteBalanceModeSelect.addEventListener('change', (event) => {
+  whiteBalanceModeSelect.addEventListener('change', event => {
 
     cameras.applyCameraConstraints(camerasSelect.value, {whiteBalanceMode: event.target.value});
   });
@@ -475,17 +507,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  echoCancellationSwitch.addEventListener('input', (event) => {
+  echoCancellationSwitch.addEventListener('input', event => {
 
     cameras.applyMicrophoneConstraints(microphonesSelect.value, {echoCancellation: event.target.checked});
   });
 
-  noiseSuppressionSwitch.addEventListener('input', (event) => {
+  noiseSuppressionSwitch.addEventListener('input', event => {
 
     cameras.applyMicrophoneConstraints(microphonesSelect.value, {noiseSuppression: event.target.checked});
   });
 
-  autoGainControlSwitch.addEventListener('input', (event) => {
+  autoGainControlSwitch.addEventListener('input', event => {
 
     cameras.applyMicrophoneConstraints(microphonesSelect.value, {autoGainControl: event.target.checked});
   });

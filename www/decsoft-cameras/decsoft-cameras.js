@@ -79,8 +79,6 @@ class DecSoftCameras {
 
          camera.stream = mediaStream;
          camera.track = mediaStream.getVideoTracks()[0];
-         camera.settings = camera.track.getSettings();
-         camera.capabilities = camera.track.getCapabilities();
 
          if (microphoneDeviceId !== false) {
 
@@ -94,8 +92,6 @@ class DecSoftCameras {
            }
 
            microphone.track = mediaStream.getAudioTracks()[0];
-           microphone.settings = microphone.track.getSettings();
-           microphone.capabilities = microphone.track.getCapabilities();
          }
 
          resolve(camera.stream);
@@ -115,14 +111,7 @@ class DecSoftCameras {
 
   getCameraCapabilities (deviceId) {
 
-    let
-      camera = this.#getCamera(deviceId);
-
-    if (camera === null) {
-      return null;
-    }
-
-    return camera.capabilities;
+    return this.#getCameraCapabilities(deviceId);
   }
 
   pauseCamera (deviceId) {
@@ -248,11 +237,11 @@ class DecSoftCameras {
     let
       microphone = this.#getMicrophone(deviceId);
 
-    if (microphone === null) {
+    if (microphone === null || microphone.track === null) {
       return null;
     }
 
-    return microphone.capabilities;
+    return microphone.track.getCapabilities();
   }
 
   videoCaptureToBlob (deviceId, videoElement) {
@@ -402,6 +391,70 @@ class DecSoftCameras {
     }, 100);
   }
 
+  getCameraResolutions (deviceId) {
+
+    let
+      camera = this.#getCamera(deviceId),
+      capabilities = this.#getCameraCapabilities(deviceId);
+
+    if (camera === null ||
+      capabilities === null ||
+      capabilities.width === undefined ||
+      capabilities.height === undefined) {
+
+        return [];
+    }
+
+    let
+      result = [],
+      maxWidth = -1,
+      maxHeight = -1,
+      resolutionsMap = [
+        { width: 160, height: 120 },
+        { width: 320, height: 180 },
+        { width: 320, height: 240 },
+        { width: 640, height: 360 },
+        { width: 640, height: 480 },
+        { width: 768, height: 576 },
+        { width: 1024, height: 576 },
+        { width: 1280, height: 720 },
+        { width: 1280, height: 768 },
+        { width: 1280, height: 800 },
+        { width: 1280, height: 900 },
+        { width: 1280, height: 1000 },
+        { width: 1920, height: 1080 },
+        { width: 1920, height: 1200 },
+        { width: 2560, height: 1440 },
+        { width: 3840, height: 2160 },
+        { width: 4096, height: 2160 }
+        // Maybe more in the future.
+      ];
+
+    maxWidth = capabilities.width.max;
+    maxHeight = capabilities.height.max;
+
+    let
+      serializedResolutionsMap = [],
+      settings = this.#getCameraSettings(deviceId),
+      currentRes = { width: settings.width, height: settings.height },
+      serializedCurrentRes = JSON.stringify(currentRes);
+
+    resolutionsMap.forEach(function (size) {
+
+      if (size.width <= maxWidth && size.height <= maxHeight) {
+
+        result.push(size);
+        serializedResolutionsMap.push(JSON.stringify(size));
+      }
+    });
+
+    if (serializedResolutionsMap.indexOf(serializedCurrentRes) === -1) {
+      result.unshift(currentRes);
+    }
+
+    return result;
+  }
+
   #getCamera (deviceId) {
 
     for (let i = 0; i < this.#devices.cameras.length; i++) {
@@ -483,11 +536,23 @@ class DecSoftCameras {
     let
       camera = this.#getCamera(deviceId);
 
-    if (camera === null) {
+    if (camera === null || camera.track === null) {
       return null;
     }
 
-    return camera.settings;
+    return camera.track.getSettings();
+  }
+
+  #getCameraCapabilities (deviceId) {
+
+    let
+      camera = this.#getCamera(deviceId);
+
+    if (camera === null || camera.track === null) {
+      return null;
+    }
+
+    return camera.track.getCapabilities();
   }
 
   #getMicrophoneSettings (deviceId) {
@@ -495,11 +560,11 @@ class DecSoftCameras {
     let
       microphone = this.#getMicrophone(deviceId);
 
-    if (microphone === null) {
+    if (microphone === null || microphone.track === null) {
       return null;
     }
 
-    return microphone.settings;
+    return microphone.track.getSettings();
   }
 
   #initDevices () {
@@ -518,9 +583,7 @@ class DecSoftCameras {
       track: null,
       stream: null,
       recChunks: [],
-      recorder: null,
-      settings: null,
-      capabilities: null
+      recorder: null
     };
   }
 
@@ -529,9 +592,7 @@ class DecSoftCameras {
     return {
       id: '',
       label: '',
-      track: null,
-      settings: null,
-      capabilities: null
+      track: null
     };
   }
 }
