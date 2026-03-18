@@ -15,6 +15,27 @@ class DecSoftCameras {
   #NO_CAM_ERROR = 'No camera found with the provided ID.';
   #NO_MIC_ERROR = 'No microphone found with the provided ID.';
 
+  #KNOW_CAM_RES = [
+    { width: 160, height: 120 },
+    { width: 320, height: 180 },
+    { width: 320, height: 240 },
+    { width: 640, height: 360 },
+    { width: 640, height: 480 },
+    { width: 768, height: 576 },
+    { width: 1024, height: 576 },
+    { width: 1280, height: 720 },
+    { width: 1280, height: 768 },
+    { width: 1280, height: 800 },
+    { width: 1280, height: 900 },
+    { width: 1280, height: 1000 },
+    { width: 1920, height: 1080 },
+    { width: 1920, height: 1200 },
+    { width: 2560, height: 1440 },
+    { width: 3840, height: 2160 },
+    { width: 4096, height: 2160 }
+    // Maybe more in the future.
+  ];
+
   getDevices (includeMicrophones = false) {
 
     this.#initDevices();
@@ -394,61 +415,31 @@ class DecSoftCameras {
   getCameraResolutions (deviceId) {
 
     let
-      camera = this.#getCamera(deviceId),
-      capabilities = this.#getCameraCapabilities(deviceId);
+      result = [],
+      camera = this.#getCamera(deviceId);
 
-    if (camera === null ||
-      capabilities === null ||
-      capabilities.width === undefined ||
-      capabilities.height === undefined) {
-
-        return [];
+    if (camera === null) {
+      return result;
     }
 
     let
-      result = [],
-      maxWidth = -1,
-      maxHeight = -1,
-      resolutionsMap = [
-        { width: 160, height: 120 },
-        { width: 320, height: 180 },
-        { width: 320, height: 240 },
-        { width: 640, height: 360 },
-        { width: 640, height: 480 },
-        { width: 768, height: 576 },
-        { width: 1024, height: 576 },
-        { width: 1280, height: 720 },
-        { width: 1280, height: 768 },
-        { width: 1280, height: 800 },
-        { width: 1280, height: 900 },
-        { width: 1280, height: 1000 },
-        { width: 1920, height: 1080 },
-        { width: 1920, height: 1200 },
-        { width: 2560, height: 1440 },
-        { width: 3840, height: 2160 },
-        { width: 4096, height: 2160 }
-        // Maybe more in the future.
-      ];
-
-    maxWidth = capabilities.width.max;
-    maxHeight = capabilities.height.max;
-
-    let
-      serializedResolutionsMap = [],
+      serializedResMap = [],
       settings = this.#getCameraSettings(deviceId),
+      capabilities = this.#getCameraCapabilities(deviceId),
       currentRes = { width: settings.width, height: settings.height },
       serializedCurrentRes = JSON.stringify(currentRes);
 
-    resolutionsMap.forEach(function (size) {
+    this.#KNOW_CAM_RES.forEach(resolution => {
 
-      if (size.width <= maxWidth && size.height <= maxHeight) {
+      if (resolution.width <= capabilities.width.max &&
+       resolution.height <= capabilities.height.max) {
 
-        result.push(size);
-        serializedResolutionsMap.push(JSON.stringify(size));
+         result.push(resolution);
+         serializedResMap.push(JSON.stringify(resolution));
       }
     });
 
-    if (serializedResolutionsMap.indexOf(serializedCurrentRes) === -1) {
+    if (serializedResMap.indexOf(serializedCurrentRes) === -1) {
       result.unshift(currentRes);
     }
 
