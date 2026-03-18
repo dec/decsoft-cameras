@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
       })
-      .catch((error) => {
+      .catch(error => {
 
         devicesStuffContainer.classList.remove('d-none');
         devicesStuffContainer.innerHTML = `${error.message} <br> Please, refresh this page if you block the permissions.`;
@@ -503,6 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cameras.downloadBlobToFile(blob, 'file.webm');
     })
     .catch(error => {
+
       alert(error);
     });
   });
