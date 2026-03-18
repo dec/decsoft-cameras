@@ -67,6 +67,11 @@ function resetControls () {
   stopCameraRecordingButton.disabled = true;
   colorTemperatureRangeInput.disabled = true;
   startCameraRecordingButton.disabled = true;
+
+  resolutionSelect.innerHTML = '';
+  resizeModeSelect.innerHTML = '';
+  exposureModeSelect.innerHTML = '';
+  whiteBalanceModeSelect.innerHTML = '';
   capturedImageContainer.classList.add('d-none');
 }
 
