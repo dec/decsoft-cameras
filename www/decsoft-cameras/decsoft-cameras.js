@@ -30,9 +30,11 @@ class DecSoftCameras {
     { width: 1280, height: 1000 },
     { width: 1920, height: 1080 },
     { width: 1920, height: 1200 },
+    { width: 2048, height: 1080 },
     { width: 2560, height: 1440 },
     { width: 3840, height: 2160 },
-    { width: 4096, height: 2160 }
+    { width: 4096, height: 2160 },
+    { width: 7680, height: 4320 }
     // Maybe more in the future.
   ];
 
